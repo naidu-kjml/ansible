@@ -673,6 +673,8 @@ class PyVmomiHelper(PyVmomi):
         self.change_detected = False
         self.customspec = None
         self.cache = PyVmomiCache(self.content, dc_name=self.params['datacenter'])
+        self.esxi_hostname = self.params.get('esxi_hostname', None)
+        self.cluster_name = self.params.get('cluster', None)
 
     def gather_facts(self, vm):
         return gather_vm_facts(self.content, vm)
@@ -1640,7 +1642,20 @@ class PyVmomiHelper(PyVmomi):
                 return False
 
     def select_resource_pool_by_name(self, resource_pool_name):
-        resource_pool = self.cache.find_obj(self.content, [vim.ResourcePool], resource_pool_name)
+        resource_pool = None
+        rps = self.cache.get_all_objs(self.content, [vim.ResourcePool])
+        for rp in rps:
+            if rp.name != resource_pool_name:
+                continue
+            if self.esxi_hostname and rp.owner.name == self.esxi_hostname:
+                resource_pool = rp
+                break
+            elif self.cluster_name and rp.owner.name == self.cluster_name:
+                resource_pool = rp
+                break
+            else:
+                resource_pool = rp
+
         if resource_pool is None:
             self.module.fail_json(msg='Could not find resource_pool "%s"' % resource_pool_name)
         return resource_pool
