@@ -88,6 +88,7 @@ except ImportError:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.vmware import vmware_argument_spec, PyVmomi
 from ansible.module_utils._text import to_native
+from ansible.module_utils.six import integer_types
 
 
 class VmwareConfigManager(PyVmomi):
@@ -98,18 +99,58 @@ class VmwareConfigManager(PyVmomi):
         self.options = self.params.get('options', dict())
         self.hosts = self.get_all_host_objs(cluster_name=cluster_name, esxi_host_name=esxi_host_name)
 
+    @staticmethod
+    def is_integer(value):
+        try:
+            int(value)
+            return True
+        except (TypeError, ValueError):
+            return False
+
+    @staticmethod
+    def is_boolean(value):
+        if value:
+            if value in [True, 'true', 'True', 'on', 'yes', 'On', 'Yes']:
+                return True
+            elif value in ['false', 'False', 'off', 'no', 'Off', 'No']:
+                return False
+        elif not value:
+            return False
+
+        return False
+
     def set_host_configuration_facts(self):
         changed = False
         for host in self.hosts:
             option_manager = host.configManager.advancedOption
             host_facts = {}
             for option in option_manager.QueryOptions():
-                host_facts[option.key] = option.value
+                host_facts[option.key] = dict(value=option.value)
+
+            for s_option in option_manager.supportedOption:
+                host_facts[s_option.key].update(
+                    option_type=s_option.optionType,
+                )
+
             change_option_list = []
             for option_key, option_value in self.options.items():
-                if option_key in host_facts and option_value != host_facts[option_key]:
-                    change_option_list.append(vim.option.OptionValue(key=option_key, value=option_value))
-                    changed = True
+                if option_key in host_facts:
+                    if isinstance(host_facts[option_key]['option_type'], (vim.option.IntOption, vim.option.LongOption)):
+                        if self.is_integer(option_value) or isinstance(option_value, integer_types):
+                            option_value = long(option_value)
+                        else:
+                            self.module.fail_json(msg="Option %s requires integer value,"
+                                                      " provided value is of type %s" % (option_key, type(option_value)))
+                    if isinstance(host_facts[option_key]['option_type'], vim.option.BoolOption):
+                        if isinstance(option_value, bool) or self.is_boolean(option_value):
+                            option_value = self.is_boolean(option_value)
+                        else:
+                            self.module.fail_json(msg="Option %s requires boolean value,"
+                                                      " provided value is of type %s" % (option_key, type(option_value)))
+
+                    if option_value != host_facts[option_key]['value']:
+                        change_option_list.append(vim.option.OptionValue(key=option_key, value=option_value))
+                        changed = True
             if changed:
                 try:
                     option_manager.UpdateOptions(changedValue=change_option_list)
