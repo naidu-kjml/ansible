@@ -81,7 +81,7 @@ RETURN = r'''#
 '''
 
 try:
-    from pyVmomi import vim, vmodl
+    from pyVmomi import vim, vmodl, VmomiSupport
 except ImportError:
     pass
 
@@ -137,7 +137,7 @@ class VmwareConfigManager(PyVmomi):
                 if option_key in host_facts:
                     if isinstance(host_facts[option_key]['option_type'], (vim.option.IntOption, vim.option.LongOption)):
                         if self.is_integer(option_value) or isinstance(option_value, integer_types):
-                            option_value = long(option_value)
+                            option_value = VmomiSupport.vmodlTypes['long'](option_value)
                         else:
                             self.module.fail_json(msg="Option %s requires integer value,"
                                                       " provided value is of type %s" % (option_key, type(option_value)))
