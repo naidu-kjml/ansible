@@ -130,7 +130,7 @@ except ImportError:
     HAS_PYVMOMI = False
 
 from ansible.module_utils.vmware import get_all_objs, connect_to_api, vmware_argument_spec, find_datacenter_by_name, \
-    find_cluster_by_name, wait_for_task, find_host_by_cluster_datacenter
+    find_cluster_by_name, wait_for_task, find_host_by_cluster_datacenter, find_resource_pool_by_name
 from ansible.module_utils.basic import AnsibleModule
 
 
@@ -262,7 +262,15 @@ class VMwareResourcePool(object):
         self.cluster_obj = find_cluster_by_name(self.content, self.cluster, datacenter=self.dc_obj)
         if self.cluster_obj is None:
             self.module.fail_json(msg="Unable to find cluster with name %s" % self.cluster)
-        rootResourcePool = self.cluster_obj.resourcePool
+        parent_rp = self.module.params.get('parent_resource_pool')
+        if parent_rp:
+            parent_rp_obj = find_resource_pool_by_name(self.content, parent_rp)
+            if parent_rp_obj is None:
+                self.module.fail_json(msg="Failed to find resource pool %s" % parent_rp)
+            rootResourcePool = parent_rp_obj
+        else:
+            rootResourcePool = self.cluster_obj.resourcePool
+
         rootResourcePool.CreateResourcePool(self.resource_pool, rp_spec)
 
         self.module.exit_json(changed=changed)
@@ -281,22 +289,24 @@ class VMwareResourcePool(object):
 
 def main():
     argument_spec = vmware_argument_spec()
-    argument_spec.update(dict(datacenter=dict(required=True, type='str'),
-                              cluster=dict(required=True, type='str'),
-                              resource_pool=dict(required=True, type='str'),
-                              mem_shares=dict(type='str', default="normal", choices=[
-                                              'high', 'custom', 'normal', 'low']),
-                              mem_limit=dict(type='int', default=-1),
-                              mem_reservation=dict(type='int', default=0),
-                              mem_expandable_reservations=dict(
-                                  type='bool', default="True"),
-                              cpu_shares=dict(type='str', default="normal", choices=[
-                                              'high', 'custom', 'normal', 'low']),
-                              cpu_limit=dict(type='int', default=-1),
-                              cpu_reservation=dict(type='int', default=0),
-                              cpu_expandable_reservations=dict(
-                                  type='bool', default="True"),
-                              state=dict(default='present', choices=['present', 'absent'], type='str')))
+    argument_spec.update(
+        dict(
+            datacenter=dict(required=True, type='str'),
+            cluster=dict(required=True, type='str'),
+            resource_pool=dict(required=True, type='str'),
+            mem_shares=dict(type='str', default="normal", choices=['high', 'custom', 'normal', 'low']),
+            mem_limit=dict(type='int', default=-1),
+            parent_resource_pool=dict(type='str'),
+            mem_reservation=dict(type='int', default=0),
+            mem_expandable_reservations=dict(
+                type='bool', default="True"),
+            cpu_shares=dict(type='str', default="normal", choices=['high', 'custom', 'normal', 'low']),
+            cpu_limit=dict(type='int', default=-1),
+            cpu_reservation=dict(type='int', default=0),
+            cpu_expandable_reservations=dict(type='bool', default="True"),
+            state=dict(default='present', choices=['present', 'absent'], type='str')
+        )
+    )
 
     module = AnsibleModule(argument_spec=argument_spec,
                            supports_check_mode=True)
