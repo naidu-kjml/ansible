@@ -267,10 +267,14 @@ options:
     - ' - C(dvswitch_name) (string): Name of the distributed vSwitch.
           This value is required if multiple distributed portgroups exists with the same name. version_added 2.7'
     - 'Optional parameters per entry (used for OS customization):'
-    - ' - C(type) (string): Type of IP assignment (either C(dhcp) or C(static)). C(dhcp) is default.'
-    - ' - C(ip) (string): Static IP address (implies C(type: static)).'
-    - ' - C(netmask) (string): Static netmask required for C(ip).'
-    - ' - C(gateway) (string): Static gateway.'
+    - ' - C(type) (string): Type of IPv4 assignment (either C(dhcp) or C(static)). C(dhcp) is default.'
+    - ' - C(ip) (string): Static IPv4 address (implies C(type: static)).'
+    - ' - C(netmask) (string): Static IPv4 netmask required for C(ip).'
+    - ' - C(gateway) (string): Static IPv4 gateway.'
+    - ' - C(typev6) (string): Type of IPv6 assignment (either C(dhcp) or C(static)). C(dhcp) is default. version_added 2.7'
+    - ' - C(ipv6) (string): Static IPv6 address (implies C(type: static)). C(ip) is also required. version_added 2.7'
+    - ' - C(netmaskv6) (string): Static IPv6 netmask required for C(ipv6). version_added 2.7'
+    - ' - C(gatewayv6) (string): Static IPv6 gateway. version_added 2.7'
     - ' - C(dns_servers) (string): DNS servers for this network interface (Windows).'
     - ' - C(domain) (string): Domain name for this network interface (Windows).'
     - ' - C(wake_on_lan) (bool): Indicates if wake-on-LAN is enabled on this virtual network adapter. version_added: 2.5'
@@ -453,6 +457,27 @@ EXAMPLES = r'''
       dns_suffix:
         - example.com
         - example2.com
+
+- name: Clone a virtual machine from Linux template and customize with IPv6
+  vmware_guest:
+    hostname: "{{ vcenter_server }}"
+    username: "{{ vcenter_user }}"
+    password: "{{ vcenter_password }}"
+    datacenter: "{{ datacenter }}"
+    state: present
+    folder: /DC1/vm
+    template: "{{ template }}"
+    name: "{{ vm_name }}"
+    cluster: DC1_C1
+    networks:
+      - name: VM Network
+        ip: 192.168.10.11
+        netmask: 255.255.255.0
+        type: static
+        ipv6: "2201:430:28f:2032::100"
+        gatewayv6: "2201:430:28f:2032::1"
+        netmask: 32
+        typev6: static
 
 - name: Rename a virtual machine (requires the virtual machine's uuid)
   vmware_guest:
@@ -1148,6 +1173,34 @@ class PyVmomiHelper(PyVmomi):
                     self.module.fail_json(msg="'ip' is required if 'netmask' is"
                                               " specified under VM network list.")
 
+            if 'typev6' in network:
+                if network['typev6'] not in ['dhcp', 'static']:
+                    self.module.fail_json(msg="Network type '%(typev6)s' for IPv6 is not a valid parameter."
+                                              " Valid parameters are ['dhcp', 'static']." % network)
+                    if network['typev6'] != 'static' and ('ipv6' in network or 'netmaskv6' in network):
+                        self.module.fail_json(msg='Static IPv6 information provided for network "%(name)s",'
+                                                  ' but "typev6" is set to "%(typev6)s".' % network)
+            else:
+                # Type is optional parameter, if user provided IP or Subnet assume
+                # network type as 'static'
+                if 'ipv6' in network or 'netmaskv6' in network:
+                    network['typev6'] = 'static'
+                else:
+                    # User wants network type as 'dhcp'
+                    network['typev6'] = 'dhcp'
+
+            if network.get('typev6') == 'static':
+                if 'ipv6' in network and 'netmaskv6' not in network:
+                    self.module.fail_json(msg="'netmaskv6' is required if 'ipv6' is"
+                                              " specified under VM network list.")
+                if 'ipv6' not in network and 'netmaskv6' in network:
+                    self.module.fail_json(msg="'ipv6' is required if 'netmaskv6' is"
+                                              " specified under VM network list.")
+
+                if 'ipv6' in network and 'ip' not in network and network.get('type') != 'static':
+                    self.module.fail_json(msg="'ip' is required if 'ipv6' is specified under"
+                                              " vm network list.")
+
             validate_device_types = ['pcnet32', 'vmxnet2', 'vmxnet3', 'e1000', 'e1000e', 'sriov']
             if 'device_type' in network and network['device_type'] not in validate_device_types:
                 self.module.fail_json(msg="Device type specified '%s' is not valid."
@@ -1422,8 +1475,20 @@ class PyVmomiHelper(PyVmomi):
             elif 'type' in network and network['type'] == 'dhcp':
                 guest_map.adapter.ip = vim.vm.customization.DhcpIpGenerator()
 
+            if "ipv6" in network and 'netmaskv6' in network:
+                guest_map.adapter.ipV6Spec = vim.vm.customization.IPSettings.IpV6AddressSpec()
+                guest_map.adapter.ipV6Spec.ip = [vim.vm.customization.FixedIpV6()]
+                guest_map.adapter.ipV6Spec.ip[0].ipAddress = str(network['ipv6'])
+                guest_map.adapter.ipV6Spec.ip[0].subnetMask = int(network['netmaskv6'])
+            elif 'typev6' in network and network['typev6'] == 'dhcp':
+                guest_map.adapter.ipV6Spec = vim.vm.customization.IPSettings.IpV6AddressSpec()
+                guest_map.adapter.ipV6Spec.ip = [vim.vm.customization.DhcpIpV6Generator()]
+
             if 'gateway' in network:
                 guest_map.adapter.gateway = network['gateway']
+
+            if "gatewayv6" in network:
+                guest_map.adapter.ipV6Spec.gateway = network['gatewayv6']
 
             # On Windows, DNS domain and DNS servers can be set by network interface
             # https://pubs.vmware.com/vi3/sdk/ReferenceGuide/vim.vm.customization.IPSettings.html
