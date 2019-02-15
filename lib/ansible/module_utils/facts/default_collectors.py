@@ -36,7 +36,12 @@ from ansible.module_utils.facts.system.apparmor import ApparmorFactCollector
 from ansible.module_utils.facts.system.caps import SystemCapabilitiesFactCollector
 from ansible.module_utils.facts.system.chroot import ChrootFactCollector
 from ansible.module_utils.facts.system.cmdline import CmdLineFactCollector
-from ansible.module_utils.facts.system.distribution import DistributionFactCollector
+
+from ansible.module_utils.facts.system.distribution.base import DistributionFactCollector
+from ansible.module_utils.facts.system.distribution.linux import LinuxDistributionCollector
+from ansible.module_utils.facts.system.distribution.darwin import DarwinDistributionCollector
+
+
 from ansible.module_utils.facts.system.date_time import DateTimeFactCollector
 from ansible.module_utils.facts.system.env import EnvFactCollector
 from ansible.module_utils.facts.system.dns import DnsFactCollector
@@ -92,6 +97,8 @@ from ansible.module_utils.facts.virtual.sunos import SunOSVirtualCollector
 _base = [
     PlatformFactCollector,
     DistributionFactCollector,
+    LinuxDistributionCollector,
+    DarwinDistributionCollector,
     LSBFactCollector
 ]
 
