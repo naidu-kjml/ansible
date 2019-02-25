@@ -201,10 +201,6 @@ class VmwareVmFacts(PyVmomi):
             if esxi_parent and isinstance(esxi_parent, vim.ClusterComputeResource):
                 cluster_name = summary.runtime.host.parent.name
 
-            vm_attributes = dict()
-            if self.module.params.get('show_attribute'):
-                vm_attributes = self.get_vm_attributes(vm)
-
             virtual_machine = {
                 "guest_name": summary.config.name,
                 "guest_fullname": summary.config.guestFullName,
@@ -214,9 +210,10 @@ class VmwareVmFacts(PyVmomi):
                 "uuid": summary.config.uuid,
                 "vm_network": net_dict,
                 "esxi_hostname": esxi_hostname,
-                "cluster": cluster_name,
-                "attributes": vm_attributes
+                "cluster": cluster_name
             }
+            if self.module.params.get('show_attribute'):
+              virtual_machine['attributes'] = self.get_vm_attributes(vm)
 
             vm_type = self.module.params.get('vm_type')
             is_template = _get_vm_prop(vm, ('config', 'template'))
