@@ -41,11 +41,12 @@ options:
     description:
       - URL containing the host and port on which the CDI Upload Proxy is available.
       - "More info: U(https://github.com/kubevirt/containerized-data-importer/blob/master/doc/upload.md#expose-cdi-uploadproxy-service)"
-  upload_host_verify_ssl:
+  validate_certs:
     description:
       - Whether or not to verify the CDI Upload Proxy's SSL certificates against your system's CA trust store.
     default: true
     type: bool
+    aliases: [ upload_host_verify_ssl ]
   path:
     description:
       - Path of local image file to transfer.
@@ -62,7 +63,6 @@ extends_documentation_fragment:
 requirements:
   - python >= 2.7
   - openshift >= 0.8.2
-  - requests >= 2.0.0
 '''
 
 EXAMPLES = '''
@@ -71,7 +71,7 @@ EXAMPLES = '''
     pvc_namespace: default
     pvc_name: pvc-vm1
     upload_host: https://localhost:8443
-    upload_host_verify_ssl: false
+    validate_certs: false
     path: /tmp/cirros-0.4.0-x86_64-disk.img
 '''
 
@@ -84,14 +84,7 @@ from collections import defaultdict
 
 from ansible.module_utils.k8s.common import AUTH_ARG_SPEC
 from ansible.module_utils.k8s.raw import KubernetesRawModule
-
-# 3rd party imports
-try:
-    import requests
-    HAS_REQUESTS = True
-except ImportError:
-    HAS_REQUESTS = False
-
+from ansible.module_utils.urls import fetch_url
 
 SERVICE_ARG_SPEC = {
     'pvc_name': {'required': True},
@@ -113,9 +106,6 @@ class KubeVirtCDIUpload(KubernetesRawModule):
     def __init__(self, *args, **kwargs):
         super(KubeVirtCDIUpload, self).__init__(*args, k8s_kind='UploadTokenRequest', **kwargs)
 
-        if not HAS_REQUESTS:
-            self.fail("This module requires the python 'requests' package. Try `pip install requests`.")
-
     @property
     def argspec(self):
         """ argspec property builder """
@@ -135,7 +125,7 @@ class KubeVirtCDIUpload(KubernetesRawModule):
         pvc_name = self.params.get('pvc_name')
         pvc_namespace = self.params.get('pvc_namespace')
         upload_host = self.params.get('upload_host')
-        upload_host_verify_ssl = self.params.get('upload_host_verify_ssl')
+        upload_host_verify_ssl = self.params.get('validate_certs')
         path = self.params.get('path')
 
         definition = defaultdict(defaultdict)
@@ -159,8 +149,9 @@ class KubeVirtCDIUpload(KubernetesRawModule):
 
         headers = {'Authorization': "Bearer {0}".format(result['result']['status']['token'])}
         url = "{0}/{1}/upload".format(upload_host, API)
-        requests.post(url, data=imgfile, headers=headers, verify=upload_host_verify_ssl)
+        resp, info = fetch_url(self, url, data=imgfile, headers=headers, method='post')
 
+        imgfile.close()
         self.exit_json(changed=True)
 
 
