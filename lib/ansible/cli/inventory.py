@@ -281,7 +281,10 @@ class InventoryCLI(CLI):
         if group.name != 'all':
             for host in sorted(group.hosts, key=attrgetter('name')):
                 result.append(self._graph_name(host.name, depth))
-                result.extend(self._show_vars(host.get_vars(), depth + 1))
+                host_vars = self._get_host_variables(host)
+                if host_vars:
+                    self._remove_internal(host_vars)
+                    result.extend(self._show_vars(host_vars, depth + 1))
 
         result.extend(self._show_vars(self._get_group_variables(group), depth))
 
