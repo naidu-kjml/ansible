@@ -534,7 +534,7 @@ class VMWareInventory(object):
                 newkey = newkey.strip()
             except Exception as e:
                 self.debugl(e)
-            if not newkey:
+            if not newkey or newkey in ('None', 'none'):
                 continue
             elif dtype == 'integer':
                 newkey = int(newkey)
