@@ -2,42 +2,14 @@
 # Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- name: Wait for Flask controller to come up online
-  wait_for:
-    host: "{{ vcsim }}"
-    port: 5000
-    state: started
-
-- name: kill vcsim
-  uri:
-    url: http://{{ vcsim }}:5000/killall
-- name: start vcsim with no folders
-  uri:
-    url: http://{{ vcsim }}:5000/spawn?datacenter=1&cluster=1&folder=0
-  register: vcsim_instance
-
-- name: Wait for Flask controller to come up online
-  wait_for:
-    host: "{{ vcsim }}"
-    port: 443
-    state: started
-
-- name: get a list of VMS from vcsim
-  uri:
-    url: http://{{ vcsim }}:5000/govc_find?filter=VM
-  register: vmlist
-
-- debug: var=vcsim_instance
-- debug: var=vmlist
-
 - name: get a guest
   set_fact:
     guest1: "{{ vmlist.json[0] | basename }}"
 
 - vmware_vm_facts:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     validate_certs: no
   register: vm_details
 
@@ -52,9 +24,9 @@
 - debug: var=vm_powerstate
 
 - vmware_guest:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     validate_certs: no
     name: "{{ guest1 }}"
     state: poweredon
@@ -66,9 +38,9 @@
 - name: Delete VM
   vmware_guest:
     validate_certs: False
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     name: "{{ guest1 }}"
     datacenter: "{{ guest1.split('_')[0] }}"
     state: absent

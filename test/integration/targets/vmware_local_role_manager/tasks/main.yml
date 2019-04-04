@@ -2,34 +2,11 @@
 # Copyright: (c) 2017-2018, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- name: Wait for Flask controller to come up online
-  wait_for:
-    host: "{{ vcsim }}"
-    port: 5000
-    state: started
-
-- name: kill vcsim
-  uri:
-    url: http://{{ vcsim }}:5000/killall
-
-- name: start vcsim
-  uri:
-    url: http://{{ vcsim }}:5000/spawn?esx=1
-  register: vcsim_instance
-
-- name: Wait for Flask controller to come up online
-  wait_for:
-    host: "{{ vcsim }}"
-    port: 443
-    state: started
-
-- debug: var=vcsim_instance
-
 - name: Create a role without privileges in check mode
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     state: present
@@ -43,9 +20,9 @@
 
 - name: Create a role without privileges
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     state: present
@@ -58,9 +35,9 @@
 
 - name: Again create a role without privileges
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     state: present
@@ -73,9 +50,9 @@
 
 - name: Delete a role
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     state: absent
@@ -88,9 +65,9 @@
 
 - name: Delete role again
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     state: absent
@@ -103,9 +80,9 @@
 
 - name: Create a role with privileges
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     local_privilege_ids: ['VirtualMachine.State.RenameSnapshot']
@@ -119,9 +96,9 @@
 
 - name: Add a privilege to existing privileges
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     local_privilege_ids: ['Folder.Create']
@@ -136,9 +113,9 @@
 
 - name: Again add a privilege to existing privileges
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     local_privilege_ids: ['Folder.Create']
@@ -153,9 +130,9 @@
 
 - name: Remove a privilege from existing privileges
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     local_privilege_ids: ['Folder.Create']
@@ -169,9 +146,9 @@
 
 - name: Again remove a privilege from existing privileges
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     local_privilege_ids: ['Folder.Create']
@@ -185,9 +162,9 @@
 
 - name: Set a privilege to an existing role
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     local_privilege_ids: ['Folder.Create']
@@ -201,9 +178,9 @@
 
 - name: Again set a privilege to an existing role
   vmware_local_role_manager:
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     local_role_name: SampleRole_0001
     validate_certs: no
     local_privilege_ids: ['Folder.Create']

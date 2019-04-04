@@ -2,40 +2,12 @@
 # Copyright: (c) 2017, James Tanner <tanner.jc@gmail.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-- name: Wait for Flask controller to come up online
-  wait_for:
-    host: "{{ vcsim }}"
-    port: 5000
-    state: started
-
-- name: kill vcsim
-  uri:
-    url: http://{{ vcsim }}:5000/killall
-- name: start vcsim with no folders
-  uri:
-    url: http://{{ vcsim }}:5000/spawn?datacenter=1&cluster=1&folder=0
-  register: vcsim_instance
-
-- name: Wait for Flask controller to come up online
-  wait_for:
-    host: "{{ vcsim }}"
-    port: 443
-    state: started
-
-- name: get a list of VMS from vcsim
-  uri:
-    url: http://{{ vcsim }}:5000/govc_find?filter=VM
-  register: vmlist
-
-- debug: var=vcsim_instance
-- debug: var=vmlist
-
 - name: create new VMs
   vmware_guest:
     validate_certs: False
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     name: "{{ 'newvm_' + item|basename }}"
     #template: "{{ item|basename }}"
     guest_id: centos64Guest
@@ -76,9 +48,9 @@
 - name: create new VMs again
   vmware_guest:
     validate_certs: False
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     name: "{{ 'newvm_' + item|basename }}"
     #template: "{{ item|basename }}"
     guest_id: centos64Guest
@@ -112,9 +84,9 @@
 - name: modify the new VMs
   vmware_guest:
     validate_certs: False
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     name: "{{ 'newvm_' + item|basename }}"
     #template: "{{ item|basename }}"
     guest_id: centos64Guest
@@ -137,9 +109,9 @@
 - name: re-modify the new VMs
   vmware_guest:
     validate_certs: False
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     name: "{{ 'newvm_' + item|basename }}"
     #template: "{{ item|basename }}"
     guest_id: centos64Guest
@@ -162,9 +134,9 @@
 - name: delete the new VMs
   vmware_guest:
     validate_certs: False
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     name: "{{ 'newvm_' + item|basename }}"
     #template: "{{ item|basename }}"
     #guest_id: centos64Guest
@@ -184,9 +156,9 @@
 - name: re-delete the new VMs
   vmware_guest:
     validate_certs: False
-    hostname: "{{ vcsim }}"
-    username: "{{ vcsim_instance['json']['username'] }}"
-    password: "{{ vcsim_instance['json']['password'] }}"
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
     name: "{{ 'newvm_' + item|basename }}"
     #template: "{{ item|basename }}"
     #guest_id: centos64Guest
