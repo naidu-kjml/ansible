@@ -11,7 +11,8 @@
       - Anonymous
       - ReadOnly
 
-- name: Gather Role facts
+- &role_data
+  name: Gather Role facts
   vmware_local_role_facts:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -19,25 +20,17 @@
     validate_certs: no
   register: role_details
 
-- name: Test if role id is present for role
+- &role_test
+  name: Test if role id is present for role
   assert:
     that: "{{ role_details.local_role_facts | json_query(s_query) != [] }}"
   vars:
     s_query: "[?role_name == '{{ item }}'].role_id"
   with_items: "{{ role_list }}"
 
-- name: Gather Role facts in check mode
-  vmware_local_role_facts:
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    validate_certs: no
-  register: role_details
+- <<: *role_data
+  name: Gather Role facts in check mode
   check_mode: yes
 
-- name: Test if role id is present for role
-  assert:
-    that: "{{ role_details.local_role_facts | json_query(s_query) != [] }}"
-  vars:
-    s_query: "[?role_name == '{{ item }}'].role_id"
-  with_items: "{{ role_list }}"
+- <<: *role_test
+  name: Test if role id is present for role in check mode

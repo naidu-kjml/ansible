@@ -12,13 +12,25 @@
         setup_esxi_instance: true
 
     # Local user manager works only with standalone ESXi server
-    - name: Gather facts about users
+    - &user_fact_data
+      name: Gather facts about users
       vmware_local_user_facts:
         hostname: "{{ hostvars[esxi1].ansible_host }}"
         username: "{{ hostvars[esxi1].ansible_user }}"
         password: "{{ hostvars[esxi1].ansible_password }}"
         validate_certs: False
       register: all_user_facts
+
+    - name: ensure user facts are gathered
+      assert:
+        that:
+            - not all_user_facts.changed
+            - all_user_facts.local_user_facts is defined
+
+    - <<: *user_fact_data
+      name: Gather facts about users in check mode
+      check_mode: yes
+
     - name: ensure user facts are gathered
       assert:
         that:
