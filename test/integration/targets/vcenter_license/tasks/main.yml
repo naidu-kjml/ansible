@@ -5,7 +5,7 @@
 - when: vcsim is not defined
   block:
   - name: Add a vCenter evaluation license
-    vcenter_license:
+    vcenter_license: &vcenter_lic_data
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
@@ -15,19 +15,12 @@
 
   - name: Remove an (unused) vCenter evaluation license
     vcenter_license:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: no
-      license: 00000-00000-00000-00000-00000
+      <<: *vcenter_lic_data
       state: absent
 
   - name: Add an invalid vCenter license
     vcenter_license:
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      validate_certs: no
+      <<: *vcenter_lic_data
       license: 00000-00000-00000-00000-00001
       state: present
     register: vcenter_license_output

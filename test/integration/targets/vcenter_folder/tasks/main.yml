@@ -20,7 +20,8 @@
     - network
   check_mode: yes
 
-- debug: msg="{{ all_folder_results }}"
+- debug:
+    msg: "{{ all_folder_results }}"
 
 - name: ensure everything for {{ dc1 }}
   assert:
@@ -44,7 +45,8 @@
     - datastore
     - network
 
-- debug: msg="{{ all_folder_results }}"
+- debug:
+    msg: "{{ all_folder_results }}"
 
 - name: ensure everything for {{ dc1 }}
   assert:
@@ -69,7 +71,8 @@
     - network
   check_mode: yes
 
-- debug: msg="{{ all_folder_results }}"
+- debug:
+    msg: "{{ all_folder_results }}"
 
 - name: ensure everything for {{ dc1 }}
   assert:
@@ -110,7 +113,8 @@
     - datastore
     - network
 
-- debug: msg="{{ all_folder_results }}"
+- debug:
+    msg: "{{ all_folder_results }}"
 
 - name: ensure everything for {{ dc1 }}
   assert:
@@ -118,7 +122,7 @@
         - all_folder_results.changed
         - not recreate_folders.changed
 
-## Testcase: Delete Delete all types of folder
+## Testcase: Delete all types of folder
 #
 # Doesn't work with vcsim. Looks like UnregisterAndDestroy isn't supported.
 - when: vcsim is not defined

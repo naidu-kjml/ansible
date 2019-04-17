@@ -23,7 +23,7 @@
     state: absent
   ignore_errors: yes
 
-- name: Remove the vSwitchs
+- name: Remove the vSwitches
   vmware_vswitch:
     validate_certs: no
     hostname: '{{ hostvars[item].ansible_host }}'
