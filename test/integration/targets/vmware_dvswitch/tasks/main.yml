@@ -3,7 +3,8 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # Testcase 0001: Add Distributed vSwitch
-- name: add distributed vSwitch
+- &dvs_data
+  name: add distributed vSwitch
   vmware_dvswitch:
     validate_certs: False
     hostname: "{{ vcenter_hostname }}"
@@ -21,36 +22,25 @@
 - name: ensure distributed vswitch is present
   assert:
     that:
-      - "{{ dvs_result_0001.changed == true }}"
+      - dvs_result_0001.changed
 
 # Testcase 0002: Add Distributed vSwitch again
 # vcsim doesn't support ldp check (self.dvs.config.linkDiscoveryProtocolConfig.protocol)
 - when: vcsim is not defined
   block:
-  - name: add distributed vSwitch again
-    vmware_dvswitch:
-      validate_certs: False
-      hostname: "{{ vcenter_hostname }}"
-      username: "{{ vcenter_username }}"
-      password: "{{ vcenter_password }}"
-      datacenter_name: "{{ dc1 }}"
-      state: present
-      switch_name: dvswitch_0001
-      mtu: 9000
-      uplink_quantity: 2
-      discovery_proto: lldp
-      discovery_operation: both
+  - <<: *dvs_data
+    name: add distributed vSwitch again
     register: dvs_result_0002
 
   - name: ensure distributed vswitch is present
     assert:
       that:
-        - "{{ dvs_result_0002.changed == false }}"
+        - not dvs_result_0002.changed
 
 
-# FIXME: Uncomment this testcase once vcsim supports distributed vswitch delete method
+# FIXME: Remove this testcase from block once vcsim supports distributed vswitch delete method
 # Currently, vcsim does not support distributed vswitch delete option,
-# Once this feature is available we can uncomment following testcase
+# Once this feature is available we can move this out of this block
 
 # Testcase 0003: Add Distributed vSwitch
   - name: delete the distributed vSwitch
@@ -67,4 +57,4 @@
   - name: ensure distributed vswitch is present
     assert:
       that:
-        - "{{ dvs_result_0003.changed == true }}"
+        - dvs_result_0003.changed
