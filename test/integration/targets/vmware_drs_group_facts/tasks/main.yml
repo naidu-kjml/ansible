@@ -13,7 +13,8 @@
       validate_certs: False
     register: drs_group_0001_results
 
-  - debug: var=drs_group_0001_results
+  - debug:
+      var: drs_group_0001_results
 
   - assert:
       that:
@@ -30,7 +31,8 @@
       validate_certs: False
     register: drs_group_0002_results
 
-  - debug: var=drs_group_0002_results
+  - debug:
+      var: drs_group_0002_results
 
   - assert:
       that:

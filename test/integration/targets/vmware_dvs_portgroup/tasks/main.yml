@@ -1,25 +1,9 @@
 # Test code for the vmware_dvs_portgroup module.
-# (c) 2017, Philippe Dellaert <philippe@dellaert.org>
-
-# This file is part of Ansible
-#
-# Ansible is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# Ansible is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
-#
+# Copyright: (c) 2017, Philippe Dellaert <philippe@dellaert.org>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 - include_tasks: ../../prepare_vmware_tests/tasks/setup_dvswitch.yml
 
-# Testcase 0001: Add basic portgroup
 - name: create basic portgroup
   vmware_dvs_portgroup:
     validate_certs: False
@@ -34,13 +18,14 @@
     state: present
   register: dvs_pg_result_0001
 
-- debug: var=dvs_pg_result_0001
+- debug:
+    var: dvs_pg_result_0001
+
 - name: ensure dvs portgroup is present
   assert:
     that:
-        - "{{ dvs_pg_result_0001.changed == true }}"
+        - dvs_pg_result_0001.changed
 
-# Testcase 0002: Add basic VLAN portgroup
 - name: create basic VLAN portgroup
   vmware_dvs_portgroup:
     validate_certs: False
@@ -58,9 +43,8 @@
 - name: ensure dvs portgroup is present
   assert:
     that:
-        - "{{ dvs_pg_result_0002.changed == true }}"
+        - dvs_pg_result_0002.changed
 
-# Testcase 0003: Add basic trunk portgroup
 - name: create basic trunk portgroup
   vmware_dvs_portgroup:
     validate_certs: False
@@ -79,9 +63,8 @@
 - name: ensure dvs portgroup is present
   assert:
     that:
-        - "{{ dvs_pg_result_0003.changed == true }}"
+        - dvs_pg_result_0003.changed
 
-# Testcase 0004: Add basic portgroup again
 - name: create basic portgroup again
   vmware_dvs_portgroup:
     validate_certs: False
@@ -99,9 +82,8 @@
 - name: ensure dvs portgroup is present
   assert:
     that:
-        - "{{ dvs_pg_result_0004.changed == false }}"
+        - not dvs_pg_result_0004.changed
 
-# Testcase 0005: Add basic portgroup with all security and policy settings enabled
 - name: create basic portgroup with all security and policy settings enabled
   vmware_dvs_portgroup:
     validate_certs: False
@@ -135,9 +117,8 @@
 - name: ensure dvs portgroup is present
   assert:
     that:
-        - "{{ dvs_pg_result_0005.changed == true }}"
+        - dvs_pg_result_0005.changed
 
-# Testcase 0006: Add basic portgroup with some settings enabled
 - name: create basic portgroup with all security and policy settings enabled
   vmware_dvs_portgroup:
     validate_certs: False
@@ -161,9 +142,8 @@
 - name: ensure dvs portgroup is present
   assert:
     that:
-        - "{{ dvs_pg_result_0006.changed == true }}"
+        - dvs_pg_result_0006.changed
 
-# Testcase 0007: Delete basic portgroup
 - name: delete basic portgroup
   vmware_dvs_portgroup:
     validate_certs: False
@@ -181,9 +161,8 @@
 - name: ensure dvs portgroup is removed
   assert:
     that:
-        - "{{ dvs_pg_result_0007.changed == true }}"
+        - dvs_pg_result_0007.changed
 
-# Testcase 0008: Delete basic portgroup again
 - name: delete basic portgroup again
   vmware_dvs_portgroup:
     validate_certs: False
@@ -201,9 +180,8 @@
 - name: ensure dvs portgroup is removed
   assert:
     that:
-        - "{{ dvs_pg_result_0008.changed == false }}"
+        - not dvs_pg_result_0008.changed
 
-# Testcase 0009: Check valid VLAN id range in DVS Portgroup
 - name: Check valid VLAN id range in DVS Portgroup
   vmware_dvs_portgroup:
     validate_certs: False

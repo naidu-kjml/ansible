@@ -9,7 +9,7 @@
     setup_datastore: true
     setup_virtualmachines: true
 
-- name: "Create DRS VM group"
+- name: Create DRS VM group
   vmware_drs_group:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -25,7 +25,8 @@
     state: present
   register: drs_vm_group_01_results
 
-- debug: var=drs_vm_group_01_results
+- debug:
+    var: drs_vm_group_01_results
 
 - assert:
     that:
@@ -33,7 +34,7 @@
 
 - when: vcsim is defined or groups['esxi-lab'] | length >= 3
   block:
-  - name: "Create DRS Host group"
+  - name: Create DRS Host group
     vmware_drs_group:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -46,13 +47,14 @@
       state: present
     register: drs_host_group_01_results
 
-  - debug: var=drs_host_group_01_results
+  - debug:
+      var: drs_host_group_01_results
 
   - assert:
       that:
         - "drs_host_group_01_results.changed"
 
-  - name: "Delete DRS Host group"
+  - name: Delete DRS Host group
     vmware_drs_group:
       # Login creds
       hostname: "{{ vcenter_hostname }}"
@@ -67,7 +69,8 @@
       state: absent
     register: drs_host_group_01_delete_results
 
-  - debug: var=drs_host_group_01_delete_results
+  - debug:
+      var: drs_host_group_01_delete_results
 
   - assert:
       that:

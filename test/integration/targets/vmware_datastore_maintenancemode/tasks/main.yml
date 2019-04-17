@@ -21,7 +21,8 @@
       validate_certs: no
     register: test_result_0001
 
-  - debug: var=test_result_0001
+  - debug:
+      var: test_result_0001
 
   - name: assert that changes were made
     assert:
@@ -38,7 +39,8 @@
       validate_certs: no
     register: test_result_0002
 
-  - debug: var=test_result_0002
+  - debug:
+      var: test_result_0002
 
   - name: assert that no changes were made
     assert:
@@ -55,7 +57,8 @@
       validate_certs: no
     register: test_result_0003
 
-  - debug: var=test_result_0003
+  - debug:
+      var: test_result_0003
 
   - name: assert that changes were made
     assert:
@@ -72,7 +75,8 @@
       validate_certs: no
     register: test_result_0004
 
-  - debug: var=test_result_0004
+  - debug:
+      var: test_result_0004
 
   - name: assert that no changes were made
     assert:

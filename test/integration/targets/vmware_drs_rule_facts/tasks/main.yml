@@ -18,7 +18,8 @@
       cluster_name: DC0_C0
     register: drs_rule_0001_results
 
-  - debug: var=drs_rule_0001_results
+  - debug:
+      var: drs_rule_0001_results
 
   - assert:
       that:
@@ -34,7 +35,8 @@
       datacenter: DC0
     register: drs_rule_0001_results
 
-  - debug: var=drs_rule_0001_results
+  - debug:
+      var: drs_rule_0001_results
 
   - assert:
       that:
