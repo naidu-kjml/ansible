@@ -47,6 +47,7 @@
     datacenter: "{{ dc1 }}"
     gather_nfs_mount_info: true
   register: facts_from_vcenter_with_dc_filter
+
 - name: get list of facts about datastores
   vmware_datastore_facts:
     validate_certs: False

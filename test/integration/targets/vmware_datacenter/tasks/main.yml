@@ -2,9 +2,8 @@
 # Copyright: (c) 2017, Abhijeet Kasurde <akasurde@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-# Testcase 0001: Add Datacenter
 - &add_dc
-  name: add datacenter
+  name: Add datacenter
   vmware_datacenter:
     validate_certs: False
     hostname: "{{ vcenter_hostname }}"
@@ -16,23 +15,23 @@
 
 - debug:
     var: dc_result
-- name: ensure datacenter is present
+
+- name: Ensure datacenter is present
   assert:
     that:
-        - "{{ dc_result.changed == true }}"
+        - dc_result.changed
 
-# Testcase 0002: Try to add same datacenter
 - <<: *add_dc
   name: add datacenter again to check idempotent behavior
 
-- name: ensure datacenter status is not changed
+- name: Ensure datacenter status is not changed
   assert:
     that:
-        - "{{ dc_result.changed == false }}"
+        - not dc_result.changed
 
 - when: vcsim is not defined
   block:
-  - name: add datacenter
+  - name: Delete datacenter
     vmware_datacenter:
       validate_certs: False
       hostname: "{{ vcenter_hostname }}"
@@ -42,7 +41,7 @@
       state: absent
     register: dc_result_delete
 
-  - name: ensure datacenter is absent
+  - name: Ensure datacenter is absent
     assert:
       that:
-        - "{{ dc_result_delete.changed == true }}"
+        - dc_result_delete.changed

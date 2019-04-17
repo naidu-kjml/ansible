@@ -16,7 +16,7 @@
 
 - assert:
     that:
-     - add_dsc_check.changed == true
+     - add_dsc_check.changed
 
 - name: Add a datastore cluster to datacenter
   vmware_datastore_cluster: *add_datastore_cluster
@@ -24,7 +24,7 @@
 
 - assert:
     that:
-     - add_dsc.changed == true
+     - add_dsc.changed
 
 - name: Add a datastore cluster to datacenter again
   vmware_datastore_cluster: *add_datastore_cluster
@@ -32,7 +32,7 @@
 
 - assert:
     that:
-     - add_dsc.changed == false
+     - not add_dsc.changed
 
 - name: Delete a datastore cluster to datacenter (check-mode)
   vmware_datastore_cluster: &delete_datastore_cluster
@@ -48,7 +48,7 @@
 
 - assert:
     that:
-     - delete_dsc_check.changed == true
+     - delete_dsc_check.changed
 
 - when: vcsim is not defined
   block:
@@ -58,4 +58,4 @@
 
   - assert:
       that:
-        - delete_dsc_check.changed == true
+        - delete_dsc_check.changed
