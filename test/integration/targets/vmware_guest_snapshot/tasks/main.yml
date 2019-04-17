@@ -4,6 +4,7 @@
     setup_attach_host: true
     setup_datastore: true
     setup_virtualmachines: true
+
 # Test0001: Try to delete the non-existent snapshot
 - name: 0001 - Delete non-existent snapshot
   vmware_guest_snapshot:

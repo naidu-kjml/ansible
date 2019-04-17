@@ -12,14 +12,29 @@
       setup_attach_host: true
       setup_datastore: true
       setup_virtualmachines: true
-  - name: Gather facts about given customization spec
+
+  - &vm_guest_facts
+    name: Gather facts about given customization spec
     vmware_guest_customization_facts:
       validate_certs: False
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
     register: vm_custom_spec_facts
-  - debug: var=vm_custom_spec_facts
+
+  - debug:
+      var: vm_custom_spec_facts
+
+  - assert:
+      that:
+        - "not vm_custom_spec_facts.changed"
+
+  - <<: *vm_guest_facts
+    name: Gather facts about given customization spec in check module
+
+  - debug:
+      var: vm_custom_spec_facts
+
   - assert:
       that:
         - "not vm_custom_spec_facts.changed"

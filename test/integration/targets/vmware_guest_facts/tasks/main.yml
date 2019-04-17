@@ -9,6 +9,7 @@
     setup_attach_host: true
     setup_datastore: true
     setup_virtualmachines: true
+
 # Testcase 0001: Get details about virtual machines
 - name: get list of facts about virtual machines
   vmware_guest_facts:
@@ -21,7 +22,8 @@
     folder: "{{ f0 }}"
   register: guest_facts_0001
 
-- debug: var=guest_facts_0001
+- debug:
+    var: guest_facts_0001
 
 - assert:
     that:
@@ -44,7 +46,8 @@
 
 - set_fact: vm1_instance_uuid="{{ guest_facts_0001['instance']['instance_uuid'] }}"
 
-- debug: var=vm1_uuid
+- debug:
+    var: vm1_uuid
 
 # Testcase 0002: Get details about virtual machines using UUID
 - name: get list of facts about virtual machines using UUID
@@ -57,9 +60,10 @@
     uuid: "{{ vm1_uuid }}"
   register: guest_facts_0002
 
-- debug: var=guest_facts_0002
+- debug:
+    var: guest_facts_0002
 
-- name: "Get specific details about virtual machines using the vsphere output schema"
+- name: Get specific details about virtual machines using the vsphere output schema
   vmware_guest_facts:
     validate_certs: False
     hostname: "{{ vcenter_hostname }}"
@@ -75,7 +79,8 @@
       - summary.runtime.connectionState
   register: guest_facts_0002b
 
-- debug: var=guest_facts_0002b
+- debug:
+    var: guest_facts_0002b
 
 - assert:
     that:
@@ -99,17 +104,17 @@
     uuid: "{{ vm1_uuid }}"
   register: guest_facts_0003
 
-- debug: var=guest_facts_0003
+- debug:
+    var: guest_facts_0003
 
 - assert:
     that:
       - "guest_facts_0003['instance']['snapshots']|length == 0"
       - "guest_facts_0003['instance']['current_snapshot'] is none"
 
-# Commenting as this is failing right now - 15 Dec 2017
 # Testcase 0004: Get details about virtual machines with two snapshots using UUID
 - name: Create first snapshot
-  vmware_guest_snapshot:
+  vmware_guest_snapshot: &vm_snap
     validate_certs: False
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"
@@ -122,14 +127,7 @@
 
 - name: Create second snapshot
   vmware_guest_snapshot:
-    validate_certs: False
-    hostname: "{{ vcenter_hostname }}"
-    username: "{{ vcenter_username }}"
-    password: "{{ vcenter_password }}"
-    datacenter: "{{ dc1 }}"
-    name: "{{ infra.vm_list[0] }}"
-    folder: "{{ f0 }}"
-    state: present
+    <<: *vm_snap
     snapshot_name: snap2
 
 - name: get list of snapshots from virtual machine using UUID
@@ -142,7 +140,8 @@
     uuid: "{{ vm1_uuid }}"
   register: guest_facts_0004
 
-- debug: var=guest_facts_0004
+- debug:
+    var: guest_facts_0004
 
 - assert:
    that:
@@ -164,7 +163,8 @@
     use_instance_uuid: True
   register: guest_facts_0005
 
-- debug: msg="{{ guest_facts_0005 }}"
+- debug:
+    msg: "{{ guest_facts_0005 }}"
 
 - assert:
     that:
