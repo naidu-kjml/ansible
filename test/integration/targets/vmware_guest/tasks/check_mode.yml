@@ -1,3 +1,7 @@
+# Test code for the vmware_guest module.
+# Copyright: (c) 2018, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
 - name: Perform all operation in check mode
   vmware_guest:
     validate_certs: False
@@ -19,7 +23,8 @@
   register: check_mode_state
   check_mode: yes
 
-- debug: var=check_mode_state
+- debug:
+    var: check_mode_state
 
 - name: assert that changes were made
   assert:
@@ -45,7 +50,8 @@
   register: check_mode_state
   check_mode: yes
 
-- debug: var=check_mode_state
+- debug:
+    var: check_mode_state
 
 - name: assert that changes were made
   assert:
