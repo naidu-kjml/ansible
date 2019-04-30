@@ -15,27 +15,31 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = '''
 ---
 module: vsphere_copy
-short_description: Copy a file to a vCenter datastore
+short_description: Copy a file to a VMware datastore
 description:
-    - Upload files to a vCenter datastore
+    - Upload files to a VMware datastore through a VCenter of a ESXi
 version_added: 2.0
 author:
 - Dag Wieers (@dagwieers)
 options:
+  hostname:
+    version_added: "2.9"
+  port:
+    version_added: "2.9"
+  username:
+    version_added: "2.9"
   host:
     description:
-      - The vCenter server on which the datastore is available.
-    required: true
+      - (description) Use C(hostname) instead like the other VMware modules
+      - The vCenter or ESXi server on which the datastore is available.
+      - This option is deprecated and will eventually be removed in 2.12.
     aliases: ['hostname']
   login:
     description:
-      - The login name to authenticate on the vCenter server.
-    required: true
+      - (description) Use C(username) instead like the other VMware modules
+      - The login name to authenticate on the vCenter or ESXi server.
+      - This option is deprecated and will eventually be removed in 2.12.
     aliases: ['username']
-  password:
-    description:
-      - The password to authenticate on the vCenter server.
-    required: true
   src:
     description:
       - The file to push to vCenter
@@ -43,21 +47,15 @@ options:
   datacenter:
     description:
       - The datacenter on the vCenter server that holds the datastore.
-    required: true
+    required: false
   datastore:
     description:
-      - The datastore on the vCenter server to push files to.
-    required: true
+      - The datastore to push files to.
+    required: false
   path:
     description:
-      - The file to push to the datastore on the vCenter server.
+      - The file to push to the datastore.
     required: true
-  validate_certs:
-    description:
-      - If C(no), SSL certificates will not be validated. This should only be
-        set to C(no) when no other option exists.
-    default: 'yes'
-    type: bool
   timeout:
     description:
       - The timeout in seconds for the upload to the datastore.
@@ -66,9 +64,10 @@ options:
     version_added: "2.8"
 
 notes:
-  - "This module ought to be run from a system that can access vCenter directly and has the file to transfer.
+  - "This module ought to be run from a system that can access the vCenter or the ESXi directly and has the file to transfer.
     It can be the normal remote target or you can change it either by using C(transport: local) or using C(delegate_to)."
-  - Tested on vSphere 5.5
+  - Tested on vSphere 5.5 and ESXi 6.7
+extends_documentation_fragment: vmware.documentation
 '''
 
 EXAMPLES = '''
@@ -103,6 +102,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.six.moves.urllib.parse import urlencode, quote
 from ansible.module_utils._text import to_native
 from ansible.module_utils.urls import open_url
+from ansible.module_utils.vmware import connect_to_api, vmware_argument_spec
 
 
 def vmware_path(datastore, datacenter, path):
@@ -110,36 +110,41 @@ def vmware_path(datastore, datacenter, path):
     path = "/folder/%s" % quote(path.lstrip("/"))
     # Due to a software bug in vSphere, it fails to handle ampersand in datacenter names
     # The solution is to do what vSphere does (when browsing) and double-encode ampersands, maybe others ?
-    datacenter = datacenter.replace('&', '%26')
     if not path.startswith("/"):
         path = "/" + path
     params = dict(dsName=datastore)
     if datacenter:
+        datacenter = datacenter.replace('&', '%26')
         params["dcPath"] = datacenter
     params = urlencode(params)
     return "%s?%s" % (path, params)
 
 
 def main():
+    argument_spec = vmware_argument_spec()
+    argument_spec.update(dict(
+        host=dict(required=False),
+        login=dict(required=False),
+        src=dict(required=True, aliases=['name']),
+        datacenter=dict(required=False),
+        datastore=dict(required=True),
+        dest=dict(required=True, aliases=['path']),
+        timeout=dict(default=10, type='int')
+    ))
 
     module = AnsibleModule(
-        argument_spec=dict(
-            host=dict(required=True, aliases=['hostname']),
-            login=dict(required=True, aliases=['username']),
-            password=dict(required=True, no_log=True),
-            src=dict(required=True, aliases=['name']),
-            datacenter=dict(required=True),
-            datastore=dict(required=True),
-            dest=dict(required=True, aliases=['path']),
-            validate_certs=dict(default=True, type='bool'),
-            timeout=dict(default=10, type='int')
-        ),
+        argument_spec=argument_spec,
         # Implementing check-mode using HEAD is impossible, since size/date is not 100% reliable
         supports_check_mode=False,
     )
 
-    host = module.params.get('host')
-    login = module.params.get('login')
+    if module.params['host'] is not None:
+        module.deprecate("The 'host' option is being replaced by 'hostname'", version='2.12')
+    if module.params['login'] is not None:
+        module.deprecate("The 'login' option is being replaced by 'username'", version='2.12')
+
+    hostname = module.params['host'] or module.params['hostname']
+    username = module.params['login'] or module.params['username']
     password = module.params.get('password')
     src = module.params.get('src')
     datacenter = module.params.get('datacenter')
@@ -155,7 +160,7 @@ def main():
     atexit.register(data.close)
 
     remote_path = vmware_path(datastore, datacenter, dest)
-    url = 'https://%s%s' % (host, remote_path)
+    url = 'https://%s%s' % (hostname, remote_path)
 
     headers = {
         "Content-Type": "application/octet-stream",
@@ -164,7 +169,7 @@ def main():
 
     try:
         r = open_url(url, data=data, headers=headers, method='PUT', timeout=timeout,
-                     url_username=login, url_password=password, validate_certs=validate_certs,
+                     url_username=username, url_password=password, validate_certs=validate_certs,
                      force_basic_auth=True)
     except socket.error as e:
         if isinstance(e.args, tuple) and e[0] == errno.ECONNRESET:
