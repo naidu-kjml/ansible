@@ -142,8 +142,8 @@ image_id:
 '''
 
 from ansible.module_utils.aws.core import AnsibleAWSModule
-from ansible.module_utils.ec2 import ec2_argument_spec
-from ansible.module_utils.ec2 import camel_dict_to_snake_dict, ansible_dict_to_boto3_tag_list
+from ansible.module_utils.ec2 import (boto3_conn, ec2_argument_spec, get_aws_connection_info,
+                                      camel_dict_to_snake_dict, ansible_dict_to_boto3_tag_list)
 from ansible.module_utils._text import to_native
 
 try:
@@ -223,8 +223,13 @@ def main():
 
     module = AnsibleAWSModule(argument_spec=argument_spec)
     # TODO: Check botocore version
-    ec2 = module.client('ec2')
-    copy_image(module, ec2)
+    region, ec2_url, aws_connect_params = get_aws_connection_info(module, boto3=True)
+    if region:
+        ec2_client = boto3_conn(module, conn_type='client', resource='ec2', region=region, endpoint=ec2_url, **aws_connect_params)
+    else:
+        module.fail_json(msg="region must be specified")
+
+    copy_image(module, ec2_client)
 
 
 if __name__ == '__main__':
