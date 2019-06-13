@@ -957,7 +957,9 @@ class PyVmomi(object):
                         break
             elif vms:
                 # Unique virtual machine found.
-                vm_obj = vms[0]
+                if self.content.searchIndex.FindByInventoryPath(os.path.join(self.params['folder'], self.params['name'])):
+                    vm_obj = vms[0]
+                vm_obj = None
 
         if vm_obj:
             self.current_vm_obj = vm_obj
