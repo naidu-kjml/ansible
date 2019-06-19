@@ -422,10 +422,14 @@ class PyVmomiHelper(PyVmomi):
                     current_disk['autoselect_datastore'] = False
                 elif 'autoselect_datastore' in disk:
                     # Find datastore which fits requirement
-                    datastores = get_all_objs(self.content, [vim.Datastore])
-                    if not datastores:
-                        self.module.fail_json(msg="Failed to gather information about"
-                                                  " available datastores in given datacenter.")
+                    esxi_hostsystem = self.vm.summary.runtime.host
+                    if esxi_hostsystem:
+                        datastores = esxi_hostsystem.datastoreBrowser.datastore
+                    else:
+                        datastores = get_all_objs(self.content, [vim.Datastore])
+                        if not datastores:
+                            self.module.fail_json(msg="Failed to gather information about"
+                                                    " available datastores in given datacenter.")
                     datastore = None
                     datastore_freespace = 0
                     for ds in datastores:
