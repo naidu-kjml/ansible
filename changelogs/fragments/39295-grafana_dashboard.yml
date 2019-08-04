@@ -1,0 +1,2 @@
+bugfixes:
+- Replace parameter 'message' with appropriate parameter name in grafana_dashboard and datadog_monitor modules, as 'message' is used internally in Ansible Core engine (https://github.com/ansible/ansible/issues/39295).

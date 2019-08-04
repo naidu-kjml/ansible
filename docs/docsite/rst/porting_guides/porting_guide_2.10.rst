@@ -105,6 +105,10 @@ Noteworthy module changes
     * When the directory specified by ``paths`` does not exist or is a file, it will no longer fail and will just warn the user
     * Junction points are no longer reported as ``islnk``, use ``isjunction`` to properly report these files. This behaviour matches the :ref:`win_stat <win_stat_module>`
     * Directories no longer return a ``size``, this matches the ``stat`` and ``find`` behaviour and has been removed due to the difficulties in correctly reporting the size of a directory
+* The parameter ``message`` in :ref:`grafana_dashboard <grafana_dashboard_module>` module is renamed to ``commit_message`` since ``message`` is used by Ansible Core engine internally.
+* The parameter ``message`` in :ref:`datadog_monitor <datadog_monitor_module>` module is renamed to ``notification_message`` since ``message`` is used by Ansible Core engine internally.
+* The parameter ``message`` in :ref:`bigpanda <bigpanda_module>` module is renamed to ``deployment_message`` since ``message`` is used by Ansible Core engine internally.
+
 
 Plugins
 =======
