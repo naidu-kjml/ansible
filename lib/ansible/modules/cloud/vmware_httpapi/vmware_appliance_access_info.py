@@ -15,7 +15,7 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r'''
 ---
 module: vmware_appliance_access_info
-short_description: Gathers info about modes of access to the vcenter appliance.
+short_description: Gathers info about modes of access to the vCenter appliance using REST API.
 description:
 - This module can be used to gather information about the four modes of accessing the VCSA: consolecli, dcui, shell, and ssh.
 - This module is based on REST API and uses httpapi connection plugin for persistent connection.
@@ -31,9 +31,9 @@ options:
   access_mode:
     description:
     - Method of access to get to appliance
-    - Valid choices are consolecli, dcui, shell, ssh.
     - If not specified, all modes will be returned.
     required: false
+    choices: ['consolecli', 'dcui', 'shell', 'ssh']
     type: str
 '''
 
@@ -90,7 +90,9 @@ def main():
         ssh='/access/ssh',
     )
 
-    if access_mode is not None:
+    if access_mode:
+        access_mode = [access_mode]
+    else:
         access_mode = slug.keys()
 
     for mode in access_mode:
@@ -98,8 +100,7 @@ def main():
             url = API['appliance']['base'] + slug[mode]
         except KeyError:
             module.fail_json(msg='Please specify correct object type to get '
-                                'information, valid choices are [%s].'
-                                % ", ".join(list(slug.keys())))
+                             'information, valid choices are [%s].' % ", ".join(list(slug.keys())))
 
         module.submit(url=url, key=mode)
 

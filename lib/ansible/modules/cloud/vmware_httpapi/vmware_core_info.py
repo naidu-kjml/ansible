@@ -16,7 +16,7 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = r'''
 ---
 module: vmware_core_info
-short_description: Gathers info about various VMware inventory objects.
+short_description: Gathers info about various VMware inventory objects using REST API
 description:
 - This module can be used to gather information about various VMware inventory objects.
 - This module is based on REST API and uses httpapi connection plugin for persistent connection.
@@ -54,15 +54,18 @@ options:
 '''
 
 EXAMPLES = r'''
-- name: Get Datacenter object information
-  vmware_core_info:
-    object_type: datacenter
-    filters:
-      - names: Asia-Datacenter1
-  register: datacenter_result
+- name: Get All VM without any filters
+  block:
+  - name: Get VMs
+    vmware_core_info:
+      object_type: "{{ object_type }}"
+    register: vm_result
 
-- set_fact:
-    datacenter_obj: "{{ datacenter_result.object_info.value[0]['datacenter'] }}"
+  - assert:
+      that:
+      - vm_result[object_type].value | length > 0
+  vars:
+    object_type: vm
 
 - name: Get all clusters from Asia-Datacenter1
   vmware_core_info:
@@ -74,7 +77,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 object_info:
-    description: facts about the given VMware object
+    description: information about the given VMware object
     returned: always
     type: dict
     sample: {

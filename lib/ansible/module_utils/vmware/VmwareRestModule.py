@@ -324,6 +324,7 @@ INVENTORY = dict(
 
 
 class VmwareRestModule(AnsibleModule):
+
     def __init__(self,
                  argument_spec=None,
                  bypass_checks=False,
@@ -371,6 +372,10 @@ class VmwareRestModule(AnsibleModule):
         # Initialize AnsibleModule superclass
         if argument_spec is None:
             argument_spec = self.rest_argument_spec()
+
+        # Output of module
+        self.result = {}
+
         AnsibleModule.__init__(
             self,
             argument_spec,
@@ -392,9 +397,6 @@ class VmwareRestModule(AnsibleModule):
 
         # Current key of output
         self.key = None
-
-        # Output of module
-        self.result = {}
 
         # Current information going to httpapi
         self.request = dict(
@@ -521,15 +523,13 @@ class VmwareRestModule(AnsibleModule):
         try:
             msg = self.response['data']['value']['messages'][0]['default_message']
         except (KeyError, TypeError):
-            msg = ('Unable to find the %s object specified due to %s'
-                    % (self.key, self.response))
+            msg = 'Unable to find the %s object specified due to %s' % (self.key, self.response)
         self.fail_json(msg=msg)
 
     def handle_object_key_error(self):
         '''Lazy exception handler'''
         msg = ('Please specify correct object type to get information, '
-                'choices are [%s].'
-                % ", ".join(list(INVENTORY.keys())))
+               'choices are [%s].' % ", ".join(list(INVENTORY.keys())))
         self.fail_json(msg=msg)
 
     def get_id(self, object_type, name):
@@ -543,13 +543,13 @@ class VmwareRestModule(AnsibleModule):
 
         try:
             url = (API[INVENTORY[object_type]['api']]['base']
-                    + INVENTORY[object_type]['url'])
+                   + INVENTORY[object_type]['url'])
             if '/' in name:
                 name.replace('/', '%2F')
             url += '&filter.names=' + name
         except KeyError:
             self.fail_json(msg='object_type must be one of [%s].'
-                            % ", ".join(list(INVENTORY.keys())))
+                           % ", ".join(list(INVENTORY.keys())))
 
         status, data = self._connection.send_request(url, {}, method='GET')
         if status != 200:
@@ -560,8 +560,8 @@ class VmwareRestModule(AnsibleModule):
         num_items = len(data['value'])
         if not self.allow_multiples and num_items > 1:
             msg = ('Found %d objects of type %s with name %s. '
-                    'Set allow_multiples to True if this is expected.'
-                    % (num_items, object_type, name))
+                   'Set allow_multiples to True if this is expected.'
+                   % (num_items, object_type, name))
             self.fail_json(msg=msg)
 
         ids = []
@@ -580,13 +580,13 @@ class VmwareRestModule(AnsibleModule):
                         # Check if filter is valid for current object type or not
                         if filter_key not in INVENTORY[object_type]['filters']:
                             msg = ('%s is not a valid %s filter, choices are [%s].'
-                                    % (key, object_type, ", ".join(INVENTORY[object_type]['filters'])))
+                                   % (key, object_type, ", ".join(INVENTORY[object_type]['filters'])))
                             self.fail_json(msg=msg)
                         # Check if value is valid for the current filter
                         if ((FILTER[filter_key]['type'] == 'str' and not re.match(FILTER[filter_key]['format'], filter[key])) or
-                            (FILTER[filter_key]['type'] == 'list' and filter[key] not in FILTER[filter_key]['choices'])):
+                                (FILTER[filter_key]['type'] == 'list' and filter[key] not in FILTER[filter_key]['choices'])):
                             msg = ('%s is not a valid %s %s'
-                                    % (filter[key], object_type, FILTER[filter_key]['name']))
+                                   % (filter[key], object_type, FILTER[filter_key]['name']))
                             self.fail_json(msg=msg)
                         if first:
                             self.request['filter'] = '?'
@@ -597,7 +597,7 @@ class VmwareRestModule(AnsibleModule):
                         if '/' in filter[key]:
                             filter[key].replace('/', '%2F')
                         self.request['filter'] += ('filter.%s=%s'
-                                                    % (FILTER[filter_key]['name'], filter[key]))
+                                                   % (FILTER[filter_key]['name'], filter[key]))
             except KeyError:
                 self.handle_object_key_error()
         else:
@@ -665,7 +665,8 @@ class VmwareRestModule(AnsibleModule):
 
         argument_spec = dict(
             allow_multiples=dict(type='bool', default=False),
-            output_level=dict(type='str', default='normal', choices=['debug', 'info', 'normal']),
+            output_level=dict(type='str', default='normal',
+                              choices=['debug', 'info', 'normal']),
             status_code=dict(type='list', default=[200]),
         )
         if use_filters:
@@ -674,6 +675,7 @@ class VmwareRestModule(AnsibleModule):
             )
         if use_state:
             argument_spec.update(
-                state=dict(type='list', default='query', choices=['absent', 'present', 'query']),
+                state=dict(type='list', default='query', choices=[
+                           'absent', 'present', 'query']),
             )
         return argument_spec
