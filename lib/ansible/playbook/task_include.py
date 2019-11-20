@@ -91,6 +91,16 @@ class TaskInclude(Task):
                 else:
                     display.warning("Ignoring invalid attribute: %s" % k)
 
+        # VALID_INCLUDE_KEYWORDS does not contain check_mode, which is supported by import_tasks
+        if ds['action'] in ('import_tasks'):
+            invalid_import_keywords = ('notify', 'register')
+            for key in invalid_import_keywords:
+                if key in ds:
+                    if C.INVALID_TASK_ATTRIBUTE_FAILED:
+                        raise AnsibleParserError("'%s' is not a valid attribute for a import_tasks" % key, obj=ds)
+                    else:
+                        display.warning("Ignoring invalid attribute: '%s'" % key)
+
         return ds
 
     def copy(self, exclude_parent=False, exclude_tasks=False):

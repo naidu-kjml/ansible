@@ -1,0 +1,2 @@
+bugfixes:
+- Raise an error when including notify in import tasks (https://github.com/ansible/ansible/issues/64935).
