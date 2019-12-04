@@ -492,7 +492,6 @@ lib/ansible/modules/cloud/alicloud/ali_instance_info.py validate-modules:doc-mis
 lib/ansible/modules/cloud/alicloud/ali_instance_info.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/alicloud/ali_instance_info.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/cloud/amazon/_lambda_facts.py validate-modules:doc-required-mismatch
-lib/ansible/modules/cloud/amazon/aws_acm.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/cloud/amazon/aws_batch_job_definition.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/aws_codebuild.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/aws_config_aggregation_authorization.py validate-modules:doc-required-mismatch
@@ -507,7 +506,6 @@ lib/ansible/modules/cloud/amazon/aws_glue_connection.py validate-modules:doc-req
 lib/ansible/modules/cloud/amazon/aws_glue_job.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/aws_netapp_cvs_active_directory.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/aws_waf_condition.py validate-modules:doc-required-mismatch
-lib/ansible/modules/cloud/amazon/cloudformation.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/cloud/amazon/cloudtrail.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/dms_endpoint.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/dms_replication_subnet_group.py validate-modules:doc-required-mismatch
@@ -529,7 +527,6 @@ lib/ansible/modules/cloud/amazon/iam_server_certificate_info.py validate-modules
 lib/ansible/modules/cloud/amazon/lambda_alias.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/lambda_event.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/lambda_info.py validate-modules:doc-required-mismatch
-lib/ansible/modules/cloud/amazon/redshift.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/cloud/amazon/redshift_cross_region_snapshots.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/redshift_subnet_group.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/amazon/route53_health_check.py validate-modules:doc-required-mismatch
@@ -896,7 +893,6 @@ lib/ansible/modules/cloud/google/gce_instance_template.py validate-modules:doc-d
 lib/ansible/modules/cloud/google/gce_instance_template.py validate-modules:doc-missing-type
 lib/ansible/modules/cloud/google/gce_instance_template.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/cloud/google/gce_instance_template.py validate-modules:undocumented-parameter
-lib/ansible/modules/cloud/google/gce_instance_template.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/cloud/google/gce_labels.py validate-modules:doc-choices-do-not-match-spec
 lib/ansible/modules/cloud/google/gce_labels.py validate-modules:doc-default-does-not-match-spec
 lib/ansible/modules/cloud/google/gce_labels.py validate-modules:doc-missing-type
@@ -1144,7 +1140,6 @@ lib/ansible/modules/cloud/openstack/os_stack.py validate-modules:parameter-type-
 lib/ansible/modules/cloud/openstack/os_subnet.py validate-modules:doc-choices-do-not-match-spec
 lib/ansible/modules/cloud/openstack/os_subnet.py validate-modules:doc-missing-type
 lib/ansible/modules/cloud/openstack/os_subnet.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/cloud/openstack/os_subnet.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/cloud/openstack/os_subnets_info.py validate-modules:doc-missing-type
 lib/ansible/modules/cloud/openstack/os_subnets_info.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/cloud/openstack/os_user.py validate-modules:doc-missing-type
@@ -1161,7 +1156,6 @@ lib/ansible/modules/cloud/openstack/os_volume_snapshot.py validate-modules:doc-m
 lib/ansible/modules/cloud/openstack/os_zone.py validate-modules:doc-choices-do-not-match-spec
 lib/ansible/modules/cloud/openstack/os_zone.py validate-modules:doc-missing-type
 lib/ansible/modules/cloud/openstack/os_zone.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/cloud/openstack/os_zone.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/cloud/oracle/oci_vcn.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/cloud/ovh/ovh_ip_failover.py validate-modules:doc-missing-type
 lib/ansible/modules/cloud/ovh/ovh_ip_failover.py validate-modules:parameter-type-not-in-doc
@@ -1284,7 +1278,6 @@ lib/ansible/modules/cloud/ovirt/ovirt_permission.py validate-modules:parameter-t
 lib/ansible/modules/cloud/ovirt/ovirt_permission_info.py future-import-boilerplate
 lib/ansible/modules/cloud/ovirt/ovirt_permission_info.py metaclass-boilerplate
 lib/ansible/modules/cloud/ovirt/ovirt_permission_info.py validate-modules:doc-missing-type
-lib/ansible/modules/cloud/ovirt/ovirt_permission_info.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/cloud/ovirt/ovirt_quota.py future-import-boilerplate
 lib/ansible/modules/cloud/ovirt/ovirt_quota.py metaclass-boilerplate
 lib/ansible/modules/cloud/ovirt/ovirt_quota.py validate-modules:doc-missing-type
@@ -1650,7 +1643,6 @@ lib/ansible/modules/cloud/vmware/vmware_guest_file_operation.py validate-modules
 lib/ansible/modules/cloud/vmware/vmware_guest_file_operation.py validate-modules:undocumented-parameter
 lib/ansible/modules/cloud/vmware/vmware_guest_snapshot.py validate-modules:doc-required-mismatch
 lib/ansible/modules/cloud/vmware/vmware_host_datastore.py validate-modules:doc-required-mismatch
-lib/ansible/modules/cloud/vmware/vmware_host_lockdown.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/cloud/vmware/vmware_portgroup.py validate-modules:doc-choices-do-not-match-spec
 lib/ansible/modules/cloud/vmware/vmware_portgroup.py validate-modules:missing-suboption-docs
 lib/ansible/modules/cloud/vmware/vmware_portgroup.py validate-modules:parameter-type-not-in-doc
@@ -1756,7 +1748,6 @@ lib/ansible/modules/crypto/entrust/ecs_domain.py validate-modules:doc-required-m
 lib/ansible/modules/crypto/openssh_cert.py validate-modules:doc-required-mismatch
 lib/ansible/modules/crypto/openssl_certificate.py validate-modules:doc-required-mismatch
 lib/ansible/modules/crypto/openssl_publickey.py validate-modules:doc-required-mismatch
-lib/ansible/modules/database/aerospike/aerospike_migrations.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/database/influxdb/influxdb_database.py validate-modules:doc-default-does-not-match-spec
 lib/ansible/modules/database/influxdb/influxdb_database.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/database/influxdb/influxdb_query.py validate-modules:doc-default-does-not-match-spec
@@ -1965,7 +1956,6 @@ lib/ansible/modules/monitoring/icinga2_host.py validate-modules:undocumented-par
 lib/ansible/modules/monitoring/librato_annotation.py validate-modules:doc-missing-type
 lib/ansible/modules/monitoring/librato_annotation.py validate-modules:doc-required-mismatch
 lib/ansible/modules/monitoring/librato_annotation.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/monitoring/librato_annotation.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/monitoring/logentries.py validate-modules:doc-choices-do-not-match-spec
 lib/ansible/modules/monitoring/logentries.py validate-modules:doc-missing-type
 lib/ansible/modules/monitoring/logentries.py validate-modules:parameter-type-not-in-doc
@@ -1977,7 +1967,6 @@ lib/ansible/modules/monitoring/logicmonitor.py validate-modules:parameter-type-n
 lib/ansible/modules/monitoring/logicmonitor_facts.py validate-modules:doc-default-does-not-match-spec
 lib/ansible/modules/monitoring/logicmonitor_facts.py validate-modules:doc-missing-type
 lib/ansible/modules/monitoring/logicmonitor_facts.py validate-modules:no-default-for-required-parameter
-lib/ansible/modules/monitoring/logicmonitor_facts.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/monitoring/logstash_plugin.py validate-modules:doc-missing-type
 lib/ansible/modules/monitoring/logstash_plugin.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/monitoring/monit.py validate-modules:doc-missing-type
@@ -1992,7 +1981,6 @@ lib/ansible/modules/monitoring/pagerduty.py validate-modules:doc-missing-type
 lib/ansible/modules/monitoring/pagerduty.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/monitoring/pagerduty_alert.py validate-modules:doc-missing-type
 lib/ansible/modules/monitoring/pagerduty_alert.py validate-modules:doc-required-mismatch
-lib/ansible/modules/monitoring/pagerduty_alert.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/monitoring/pingdom.py validate-modules:doc-choices-do-not-match-spec
 lib/ansible/modules/monitoring/pingdom.py validate-modules:doc-missing-type
 lib/ansible/modules/monitoring/rollbar_deployment.py validate-modules:doc-missing-type
@@ -2198,7 +2186,6 @@ lib/ansible/modules/network/aci/aci_aaa_user.py validate-modules:doc-required-mi
 lib/ansible/modules/network/aci/aci_aaa_user_certificate.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/aci/aci_access_port_block_to_access_port.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/aci/aci_access_port_to_interface_policy_leaf_profile.py validate-modules:doc-required-mismatch
-lib/ansible/modules/network/aci/aci_access_port_to_interface_policy_leaf_profile.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/aci/aci_access_sub_port_block_to_access_port.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/aci/aci_aep.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/aci/aci_aep_to_domain.py validate-modules:doc-required-mismatch
@@ -2211,7 +2198,6 @@ lib/ansible/modules/network/aci/aci_config_snapshot.py validate-modules:doc-requ
 lib/ansible/modules/network/aci/aci_contract.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/aci/aci_contract_subject.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/aci/aci_contract_subject_to_filter.py validate-modules:doc-required-mismatch
-lib/ansible/modules/network/aci/aci_contract_subject_to_filter.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/aci/aci_domain.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/aci/aci_domain_to_encap_pool.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/aci/aci_domain_to_vlan_pool.py validate-modules:doc-required-mismatch
@@ -3153,7 +3139,6 @@ lib/ansible/modules/network/cloudengine/ce_vxlan_vap.py validate-modules:undocum
 lib/ansible/modules/network/cloudvision/cv_server_provision.py pylint:blacklisted-name
 lib/ansible/modules/network/cloudvision/cv_server_provision.py validate-modules:doc-missing-type
 lib/ansible/modules/network/cloudvision/cv_server_provision.py validate-modules:doc-required-mismatch
-lib/ansible/modules/network/cloudvision/cv_server_provision.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/cnos/cnos_backup.py validate-modules:doc-choices-do-not-match-spec
 lib/ansible/modules/network/cnos/cnos_backup.py validate-modules:doc-missing-type
 lib/ansible/modules/network/cnos/cnos_backup.py validate-modules:doc-required-mismatch
@@ -3235,7 +3220,6 @@ lib/ansible/modules/network/cnos/cnos_static_route.py validate-modules:doc-requi
 lib/ansible/modules/network/cnos/cnos_static_route.py validate-modules:missing-suboption-docs
 lib/ansible/modules/network/cnos/cnos_static_route.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/cnos/cnos_static_route.py validate-modules:undocumented-parameter
-lib/ansible/modules/network/cnos/cnos_static_route.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/cnos/cnos_system.py validate-modules:doc-missing-type
 lib/ansible/modules/network/cnos/cnos_system.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/cnos/cnos_template.py validate-modules:doc-choices-do-not-match-spec
@@ -3701,7 +3685,6 @@ lib/ansible/modules/network/frr/frr_facts.py validate-modules:parameter-type-not
 lib/ansible/modules/network/icx/icx_interface.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/icx/icx_l3_interface.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/icx/icx_linkagg.py validate-modules:doc-required-mismatch
-lib/ansible/modules/network/icx/icx_logging.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/icx/icx_static_route.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/icx/icx_user.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/icx/icx_vlan.py validate-modules:doc-required-mismatch
@@ -3838,7 +3821,6 @@ lib/ansible/modules/network/ios/ios_static_route.py validate-modules:doc-require
 lib/ansible/modules/network/ios/ios_static_route.py validate-modules:missing-suboption-docs
 lib/ansible/modules/network/ios/ios_static_route.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/ios/ios_static_route.py validate-modules:undocumented-parameter
-lib/ansible/modules/network/ios/ios_static_route.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/ios/ios_system.py future-import-boilerplate
 lib/ansible/modules/network/ios/ios_system.py metaclass-boilerplate
 lib/ansible/modules/network/ios/ios_system.py validate-modules:doc-default-does-not-match-spec
@@ -4074,7 +4056,6 @@ lib/ansible/modules/network/junos/junos_vrf.py validate-modules:parameter-type-n
 lib/ansible/modules/network/junos/junos_vrf.py validate-modules:undocumented-parameter
 lib/ansible/modules/network/meraki/meraki_admin.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/meraki/meraki_config_template.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/network/meraki/meraki_firewalled_services.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/meraki/meraki_malware.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/meraki/meraki_mr_l3_firewall.py validate-modules:doc-type-does-not-match-spec
 lib/ansible/modules/network/meraki/meraki_mx_l3_firewall.py validate-modules:parameter-type-not-in-doc
@@ -4082,19 +4063,15 @@ lib/ansible/modules/network/meraki/meraki_mx_l7_firewall.py validate-modules:non
 lib/ansible/modules/network/meraki/meraki_mx_l7_firewall.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/meraki/meraki_nat.py validate-modules:doc-type-does-not-match-spec
 lib/ansible/modules/network/meraki/meraki_nat.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/network/meraki/meraki_nat.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/meraki/meraki_network.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/meraki/meraki_organization.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/meraki/meraki_snmp.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/network/meraki/meraki_snmp.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/meraki/meraki_ssid.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/meraki/meraki_ssid.py validate-modules:doc-type-does-not-match-spec
-lib/ansible/modules/network/meraki/meraki_ssid.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/meraki/meraki_switchport.py validate-modules:doc-required-mismatch
 lib/ansible/modules/network/meraki/meraki_switchport.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/meraki/meraki_syslog.py validate-modules:doc-choices-do-not-match-spec
 lib/ansible/modules/network/meraki/meraki_syslog.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/network/meraki/meraki_syslog.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/network/meraki/meraki_vlan.py validate-modules:missing-suboption-docs
 lib/ansible/modules/network/meraki/meraki_vlan.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/network/meraki/meraki_vlan.py validate-modules:undocumented-parameter
@@ -5311,7 +5288,6 @@ lib/ansible/modules/remote_management/manageiq/manageiq_alerts.py validate-modul
 lib/ansible/modules/remote_management/manageiq/manageiq_alerts.py validate-modules:doc-required-mismatch
 lib/ansible/modules/remote_management/manageiq/manageiq_alerts.py validate-modules:implied-parameter-type-mismatch
 lib/ansible/modules/remote_management/manageiq/manageiq_alerts.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/remote_management/manageiq/manageiq_alerts.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/remote_management/manageiq/manageiq_group.py validate-modules:doc-missing-type
 lib/ansible/modules/remote_management/manageiq/manageiq_group.py validate-modules:doc-required-mismatch
 lib/ansible/modules/remote_management/manageiq/manageiq_group.py validate-modules:implied-parameter-type-mismatch
@@ -5542,7 +5518,6 @@ lib/ansible/modules/storage/netapp/na_ontap_aggregate.py validate-modules:doc-mi
 lib/ansible/modules/storage/netapp/na_ontap_aggregate.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/storage/netapp/na_ontap_autosupport.py validate-modules:doc-missing-type
 lib/ansible/modules/storage/netapp/na_ontap_autosupport.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/storage/netapp/na_ontap_autosupport.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/storage/netapp/na_ontap_broadcast_domain.py validate-modules:doc-missing-type
 lib/ansible/modules/storage/netapp/na_ontap_broadcast_domain.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/storage/netapp/na_ontap_broadcast_domain_ports.py validate-modules:doc-missing-type
@@ -5651,7 +5626,6 @@ lib/ansible/modules/storage/netapp/na_ontap_vscan_on_demand_task.py validate-mod
 lib/ansible/modules/storage/netapp/na_ontap_vscan_on_demand_task.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/storage/netapp/na_ontap_vscan_scanner_pool.py validate-modules:doc-missing-type
 lib/ansible/modules/storage/netapp/na_ontap_vscan_scanner_pool.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/storage/netapp/na_ontap_vscan_scanner_pool.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/storage/netapp/na_ontap_vserver_peer.py validate-modules:doc-required-mismatch
 lib/ansible/modules/storage/netapp/na_ontap_vserver_peer.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/storage/netapp/netapp_e_alerts.py validate-modules:parameter-type-not-in-doc
@@ -5708,13 +5682,11 @@ lib/ansible/modules/storage/netapp/netapp_e_storagepool.py validate-modules:doc-
 lib/ansible/modules/storage/netapp/netapp_e_storagepool.py validate-modules:parameter-type-not-in-doc
 lib/ansible/modules/storage/netapp/netapp_e_syslog.py validate-modules:doc-missing-type
 lib/ansible/modules/storage/netapp/netapp_e_syslog.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/storage/netapp/netapp_e_syslog.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/storage/netapp/netapp_e_volume.py validate-modules:doc-default-does-not-match-spec
 lib/ansible/modules/storage/netapp/netapp_e_volume.py validate-modules:doc-default-incompatible-type
 lib/ansible/modules/storage/netapp/netapp_e_volume.py validate-modules:doc-missing-type
 lib/ansible/modules/storage/netapp/netapp_e_volume.py validate-modules:doc-required-mismatch
 lib/ansible/modules/storage/netapp/netapp_e_volume.py validate-modules:parameter-type-not-in-doc
-lib/ansible/modules/storage/netapp/netapp_e_volume.py validate-modules:unknown-argument-spec-key
 lib/ansible/modules/storage/netapp/netapp_e_volume_copy.py validate-modules:doc-choices-do-not-match-spec
 lib/ansible/modules/storage/netapp/netapp_e_volume_copy.py validate-modules:doc-default-does-not-match-spec
 lib/ansible/modules/storage/netapp/netapp_e_volume_copy.py validate-modules:doc-required-mismatch

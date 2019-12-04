@@ -191,7 +191,7 @@ def main():
             name=dict(required=False),
             service_id=dict(required=True),
             service_key=dict(require=False),
-            integration_key=dict(require=False),
+            integration_key=dict(required=False),
             api_key=dict(required=True),
             state=dict(required=True,
                        choices=['triggered', 'acknowledged', 'resolved']),

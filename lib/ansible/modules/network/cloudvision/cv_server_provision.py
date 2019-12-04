@@ -585,7 +585,7 @@ def main():
         switch_name=dict(required=True),
         switch_port=dict(required=True),
         port_vlan=dict(required=False, default=None),
-        template=dict(require=True),
+        template=dict(required=True),
         action=dict(default='show', choices=['show', 'add', 'remove']),
         auto_run=dict(type='bool', default=False))
 

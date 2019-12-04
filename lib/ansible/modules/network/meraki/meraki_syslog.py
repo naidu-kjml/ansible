@@ -164,7 +164,7 @@ def main():
 
     argument_spec = meraki_argument_spec()
     argument_spec.update(net_id=dict(type='str'),
-                         servers=dict(type='list', element='dict', options=server_arg_spec),
+                         servers=dict(type='list', elements='dict', options=server_arg_spec),
                          state=dict(type='str', choices=['present', 'query'], default='present'),
                          net_name=dict(type='str', aliases=['name', 'network']),
                          )

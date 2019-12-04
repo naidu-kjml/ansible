@@ -530,7 +530,7 @@ def main():
     module = AnsibleModule(
         argument_spec=dict(
             state=dict(choices=['present', 'absent'], default='present'),
-            name=dict(require=True, aliases=['base_name']),
+            name=dict(required=True, aliases=['base_name']),
             size=dict(default='f1-micro'),
             source=dict(),
             image=dict(),

@@ -1208,6 +1208,7 @@ class ModuleValidator(Validator):
                     msg=msg,
                 )
                 continue
+
             for key in data:
                 if key not in VALID_ARGUMENT_SPEC_KEYS:
                     msg = "Argument '%s' in argument_spec" % arg

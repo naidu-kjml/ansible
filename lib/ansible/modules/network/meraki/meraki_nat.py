@@ -491,9 +491,9 @@ def main():
         net_name=dict(type='str', aliases=['name', 'network']),
         state=dict(type='str', choices=['present', 'query'], default='present'),
         subset=dict(type='list', choices=['1:1', '1:many', 'all', 'port_forwarding'], default='all'),
-        one_to_one=dict(type='list', element='dict', options=one_to_one_spec),
-        one_to_many=dict(type='list', element='dict', options=one_to_many_spec),
-        port_forwarding=dict(type='list', element='dict', options=port_forwarding_spec),
+        one_to_one=dict(type='list', elements='dict', options=one_to_one_spec),
+        one_to_many=dict(type='list', elements='dict', options=one_to_many_spec),
+        port_forwarding=dict(type='list', elements='dict', options=port_forwarding_spec),
     )
 
     # the AnsibleModule object will be our abstraction working with Ansible
