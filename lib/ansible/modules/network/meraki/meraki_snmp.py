@@ -81,6 +81,7 @@ options:
         - Only relevant if C(access) is set to C(users).
         type: list
         version_added: '2.9'
+        elements: dict
         suboptions:
             username:
                 description: Username of user with access.
@@ -317,7 +318,7 @@ def main():
                          peer_ips=dict(type='str'),
                          access=dict(type='str', choices=['none', 'community', 'users']),
                          community_string=dict(type='str', no_log=True),
-                         users=dict(type='list', default=None, element='str', options=user_arg_spec),
+                         users=dict(type='list', default=None, elements='dict', options=user_arg_spec),
                          net_name=dict(type='str'),
                          net_id=dict(type='str'),
                          )
