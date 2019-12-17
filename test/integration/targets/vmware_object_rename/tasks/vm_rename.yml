@@ -1,0 +1,55 @@
+# Test code for the vmware_object_rename Operations.
+# Copyright: (c) 2019, Abhijeet Kasurde <akasurde@redhat.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+- when: vcsim is not defined
+  block:
+    - name: Get VM Facts
+      vmware_vm_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: False
+      register: vm_info
+
+    - set_fact: vm_name="{{ vm_info['virtual_machines'][0]['guest_name'] }}"
+    
+    - set_fact: new_vm_name="vm_8042"
+    
+    - name: Rename VM with name {{ vm_name }} to {{ new_vm_name }}
+      vmware_object_rename:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: False
+        object_type: VM
+        object_name: "{{ vm_name }}"
+        new_name: "{{ new_vm_name }}"
+      register: vm_rename
+    
+    - name: Check if VM rename status
+      assert:
+        that:
+          - vm_rename.changed
+          - vm_rename.rename_status.current_name == new_vm_name
+          - vm_rename.rename_status.desired_name == new_vm_name
+          - vm_rename.rename_status.previous_name == vm_name
+
+    - name: Revert rename VM with name {{ new_vm_name }} to {{ vm_name }}
+      vmware_object_rename:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: False
+        object_type: VM
+        object_name: "{{ new_vm_name }}"
+        new_name: "{{ vm_name }}"
+      register: vm_rename
+    
+    - name: Check if VM renaming works again
+      assert:
+        that:
+          - vm_rename.changed
+          - vm_rename.rename_status.current_name == vm_name
+          - vm_rename.rename_status.desired_name == vm_name
+          - vm_rename.rename_status.previous_name == new_vm_name
